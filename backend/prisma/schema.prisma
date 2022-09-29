@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Post{
+  // everytime you have to write like this for id
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  // here @relation defines the relation between User and Post according to their authorId
+  author User @relation(fields: [authorId], references: [id])
+  authorId String @db.ObjectId
+  slug String
+  title String
+  body String
+}
+
+model User {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  // Here "?" defines that this field is optional
+  name  String?
+  // @unique defines that email must be unique for each user
+  email String @unique
+  password String
+  // user can have as many posts as they want
+  posts Post[]
+}
