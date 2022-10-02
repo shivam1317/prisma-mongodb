@@ -28,6 +28,9 @@ exports.updatePost = async (req, res, next) => {
   try {
     // get the post id from url
     const { id } = req.params;
+
+    // NOTE: if you want value from url like http://localhost/user?id=12 then use req.query and if you want value from a url like http://localhost/user/12 then use req.params
+
     // get the title and body from body
     const { title, body } = req.body;
     const result = await prisma.post.update({
@@ -50,6 +53,7 @@ exports.updatePost = async (req, res, next) => {
 exports.deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
+    // here we are deleting on the basis of id
     await prisma.post.delete({
       where: {
         id: id,
