@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const isLoggedin = async (req, res, next) => {
   try {
     // get the token from cookie
-    const token = req.cookie.token;
+    const token = req.cookies.token;
     if (!token) {
       res.send("Please login");
       throw new Error("User is not logged in!");
@@ -15,7 +15,7 @@ const isLoggedin = async (req, res, next) => {
     req.user = await prisma.user.findUnique({
       where: {
         // we have encoded the jwt token using id so we will fetch the user on the basis of id only
-        id: decoded.userId,
+        id: decoded.userid,
       },
     });
     next();
@@ -23,3 +23,4 @@ const isLoggedin = async (req, res, next) => {
     throw new Error(error.message);
   }
 };
+module.exports = isLoggedin;
